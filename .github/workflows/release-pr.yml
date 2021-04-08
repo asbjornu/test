@@ -15,7 +15,10 @@ jobs:
         id: name
         env:
           REF: ${{ github.ref }}
-        run: echo "::set-output name=branch::${REF#refs/heads/release/}"
+        run: |
+          name="${REF#refs/heads/release/}"
+          echo "Name: $name"
+          echo "::set-output name=branch::$name"
 
   release-develop-pr:
     runs-on: ubuntu-latest
