@@ -14,26 +14,24 @@ jobs:
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: develop
-          pr_title: "Release ${{ github.ref }} (develop)"
+          pr_title: Release ${{ github.ref }} (develop)
           pr_body: ":crown: *An automated PR*"
-          pr_label: "release"
-          pr_milestone: "${{ github.ref }}"
+          pr_label: release
           pr_draft: true
           pr_allow_empty: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  release-master-pr:
+  release-main-pr:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: pull-request
         uses: repo-sync/pull-request@v2
         with:
-          destination_branch: master
-          pr_title: "Release ${{ github.ref }} (master)"
+          destination_branch: main
+          pr_title: Release ${{ github.ref }} (main)
           pr_body: ":crown: *An automated PR*"
-          pr_label: "release"
-          pr_milestone: "${{ github.ref }}"
+          pr_label: release
           pr_draft: true
           pr_allow_empty: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
