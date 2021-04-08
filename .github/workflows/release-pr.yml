@@ -1,4 +1,4 @@
-name: Release PR
+name: release
 
 on:
   push:
@@ -6,16 +6,29 @@ on:
       - release/*
 
 jobs:
-  release-develop-pr:
+  release-name:
+    outputs:
+      name: ${{ steps.name.outputs.name }}
     runs-on: ubuntu-latest
     steps:
+      - name: Create release name
+        id: name
+        env:
+          REF: ${{ github.ref }}
+        run: echo "::set-output name=branch::${REF#refs/heads/release/}"
+
+  release-develop-pr:
+    runs-on: ubuntu-latest
+    needs: release-name
+    steps:
       - uses: actions/checkout@v2
-      - name: pull-request
-        uses: repo-sync/pull-request@v2
+      - uses: repo-sync/pull-request@v2
         with:
           destination_branch: develop
-          pr_title: Release ${{ github.ref }} (develop)
-          pr_body: ":crown: *An automated PR*"
+          pr_title: Release ${{ needs.release-name.outputs.name }} (develop)
+          pr_body: |
+            ## Release ${{ needs.release-name.outputs.name }} (develop)
+            :crown: *An automated PR*"
           pr_label: release
           pr_draft: true
           pr_allow_empty: true
@@ -23,14 +36,16 @@ jobs:
 
   release-main-pr:
     runs-on: ubuntu-latest
+    needs: release-name
     steps:
       - uses: actions/checkout@v2
-      - name: pull-request
-        uses: repo-sync/pull-request@v2
+      - uses: repo-sync/pull-request@v2
         with:
           destination_branch: main
-          pr_title: Release ${{ github.ref }} (main)
-          pr_body: ":crown: *An automated PR*"
+          pr_title: Release ${{ needs.release-name.outputs.name }} (main)
+          pr_body: |
+            ## Release ${{ needs.release-name.outputs.name }} (main)
+            :crown: *An automated PR*"
           pr_label: release
           pr_draft: true
           pr_allow_empty: true
