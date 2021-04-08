@@ -26,9 +26,7 @@ jobs:
         with:
           destination_branch: develop
           pr_title: Release ${{ needs.release-name.outputs.name }} (develop)
-          pr_body: |
-            ## Release ${{ needs.release-name.outputs.name }} (develop)
-            :crown: *An automated PR*"
+          pr_body: "## Release ${{ needs.release-name.outputs.name }} (develop)\n:crown: *An automated PR*"
           pr_label: release
           pr_draft: true
           pr_allow_empty: true
@@ -43,9 +41,7 @@ jobs:
         with:
           destination_branch: main
           pr_title: Release ${{ needs.release-name.outputs.name }} (main)
-          pr_body: |
-            ## Release ${{ needs.release-name.outputs.name }} (main)
-            :crown: *An automated PR*"
+          pr_body: "## Release ${{ needs.release-name.outputs.name }} (main)\n:crown: *An automated PR*"
           pr_label: release
           pr_draft: true
           pr_allow_empty: true
