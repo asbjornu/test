@@ -18,7 +18,7 @@ jobs:
         run: |
           name="${REF#refs/heads/release/}"
           echo "Name: $name"
-          echo "::set-output name=branch::$name"
+          echo "::set-output name=name::$name"
 
   release-develop-pr:
     runs-on: ubuntu-latest
