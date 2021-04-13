@@ -1,0 +1,18 @@
+name: Rebase
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  rebase:
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/amend')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Amend
+        run: |
+          git config --global user.name '${{ github.actor }}'
+          git config --global user.email 'opensource@payex.com'
+          git commit --amend --no-edit
+          git push
