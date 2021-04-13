@@ -15,4 +15,4 @@ jobs:
           git config --global user.name '${{ github.actor }}'
           git config --global user.email 'opensource@payex.com'
           git commit --amend --no-edit
-          git push
+          git push --force
