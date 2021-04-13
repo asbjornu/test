@@ -4,6 +4,8 @@ on:
   pull_request:
   push:
   release:
+  issue_comment:
+    types: [created]
 
 jobs:
   context:
