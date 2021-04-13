@@ -70,7 +70,7 @@ amend() {
 
 main() {
     initialize "$@"
-    generate_variables
+    amend
 }
 
 main "$@"
