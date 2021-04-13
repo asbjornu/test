@@ -11,7 +11,7 @@ latest commit with the credentials of the user who wrote the '/amend' comment.
 GITHUB_CONTEXT: An environment variable containing a JSON string of the GitHub
                 context object. Typically generated with \${{ toJson(github) }}."
 
-initialize() {
+main() {
     github_context_json="$GITHUB_CONTEXT"
 
     if [[ -z "$github_context_json" ]]; then
@@ -23,6 +23,7 @@ initialize() {
     pr_url=$(echo "$github_context_json" | jq --raw-output .event.issue.pull_request.html_url)
     username=$(echo "$github_context_json" | jq --raw-output .event.sender.login)
     user_url=$(echo "$github_context_json" | jq --raw-output .event.sender.url)
+    repo_url=$(echo "$github_context_json" | jq --raw-output .event.repository.html_url)
     collaborators_url=$(echo "$github_context_json" | jq --raw-output .event.repository.collaborators_url)
 
     if [[ -z "$pr_url" ]]; then
@@ -43,6 +44,12 @@ initialize() {
         exit 1
     fi
 
+    if [[ -z "$repo_url" ]]; then
+        echo "No 'event.repository.html_url' found in the GitHub context." >&2
+        echo "$help_message"
+        exit 1
+    fi
+
     if [[ -z "$collaborators_url" ]]; then
         echo "No 'event.repository.collaborators_url' found in the GitHub context." >&2
         echo "$help_message"
@@ -57,8 +64,8 @@ initialize() {
         exit 1
     fi
 
-    name=$(echo $user_json | jq --raw-output .name)
-    email=$(echo $user_json | jq --raw-output .email)
+    name=$(echo "$user_json" | jq --raw-output .name)
+    email=$(echo "$user_json" | jq --raw-output .email)
 
     if [[ -z "$name" ]]; then
         echo "No 'name' found in '$user_url'." >&2
@@ -80,9 +87,10 @@ initialize() {
     # fails (404 not found), `gh` should return 1 and thus fail the entire
     # script. For more information, see:
     # https://docs.github.com/en/rest/reference/repos#check-if-a-user-is-a-repository-collaborator
-    if ! gh api -X GET "$collaborator_url"; then
-        echo "'$username' does not have access to this repository."
-        exit 1
+    if gh api -X GET "$collaborator_url" > /dev/null; then
+        amend
+    else
+        echo "'$username' does not have access to the repository <$repo_url>."
     fi
 }
 
@@ -92,11 +100,6 @@ amend() {
     git config --global user.email "$email"
     git commit --amend --no-edit
     git push --force
-}
-
-main() {
-    initialize "$@"
-    amend
 }
 
 main "$@"
