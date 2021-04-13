@@ -1,16 +1,16 @@
-name: Amend
+name: amend
 
 on:
   issue_comment:
     types: [created]
 
 jobs:
-  rebase:
+  amend:
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/amend')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Amend
+      - name: amend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
