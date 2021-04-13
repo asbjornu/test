@@ -13,9 +13,5 @@ jobs:
       - name: amend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-            gh pr checkout "${{ github.event.issue.pull_request.html_url }}"
-            git config --global user.name '${{ github.actor }}'
-            git config --global user.email 'opensource@payex.com'
-            git commit --amend --no-edit
-            git push --force
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: .github/scripts/amend.sh
