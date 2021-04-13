@@ -1,4 +1,4 @@
-name: Rebase
+name: Amend
 
 on:
   issue_comment:
