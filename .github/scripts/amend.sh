@@ -21,21 +21,34 @@ initialize() {
     fi
 
     pr_url=$(echo "$github_context_json" | jq --raw-output .event.issue.pull_request.html_url)
-    username=$(echo "$github_context_json" | jq --raw-output .actor)
+    username=$(echo "$github_context_json" | jq --raw-output .event.sender.login)
+    user_url=$(echo "$github_context_json" | jq --raw-output .event.sender.url)
+    collaborators_url=$(echo "$github_context_json" | jq --raw-output .event.repository.collaborators_url)
 
     if [[ -z "$pr_url" ]]; then
-        echo "No 'pr_url' found in the GitHub context." >&2
+        echo "No 'event.issue.pull_request.html_url' found in the GitHub context." >&2
         echo "$help_message"
         exit 1
     fi
 
     if [[ -z "$username" ]]; then
-        echo "No 'username' found in the GitHub context." >&2
+        echo "No 'event.sender.login' found in the GitHub context." >&2
         echo "$help_message"
         exit 1
     fi
 
-    user_url="users/$username"
+    if [[ -z "$user_url" ]]; then
+        echo "No 'event.sender.url' found in the GitHub context." >&2
+        echo "$help_message"
+        exit 1
+    fi
+
+    if [[ -z "$collaborators_url" ]]; then
+        echo "No 'event.repository.collaborators_url' found in the GitHub context." >&2
+        echo "$help_message"
+        exit 1
+    fi
+
     user_json=$(gh api -X GET "$user_url")
 
     if [[ -z "$user_json" ]]; then
@@ -56,6 +69,19 @@ initialize() {
     if [[ -z "$email" ]]; then
         echo "No 'email' found in '$user_url'." >&2
         echo "$help_message"
+        exit 1
+    fi
+
+    # Replace the template part of the URL with the username (collaborator).
+    # https://api.github.com/repos/asbjornu/test/collaborators{/collaborator}
+    collaborator_url="${collaborators_url/\{\/collaborator\}//$username}"
+
+    # If the request for </repos/{owner}/{repo}/collaborators/{username}>
+    # fails (404 not found), `gh` should return 1 and thus fail the entire
+    # script. For more information, see:
+    # https://docs.github.com/en/rest/reference/repos#check-if-a-user-is-a-repository-collaborator
+    if ! gh api -X GET "$collaborator_url"; then
+        echo "'$username' does not have access to this repository."
         exit 1
     fi
 }
