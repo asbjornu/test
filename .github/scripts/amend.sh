@@ -99,6 +99,7 @@ amend() {
     git config --global user.name "$name"
     git config --global user.email "$email"
     git commit --amend --no-edit
+    # TODO: push with gh to use the PAT
     git push --force
 }
 
