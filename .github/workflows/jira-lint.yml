@@ -6,7 +6,7 @@ jobs:
   jira-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: asbjornu/jira-lint@feature/destructure-login
+      - uses: asbjornu/jira-lint@feature/remove-basic-auth
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_TOKEN }}
