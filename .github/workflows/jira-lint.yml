@@ -1,0 +1,14 @@
+name: jira-lint
+
+on: [pull_request]
+
+jobs:
+  jira-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cleartax/jira-lint@v0.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          jira-token: ${{ secrets.JIRA_TOKEN }}
+          jira-base-url: https://payexjira.atlassian.net
+          skip-branches: '^(develop|master|main|release\/v?\d+)$'
