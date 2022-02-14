@@ -6,7 +6,7 @@ jobs:
   jira-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: cleartax/jira-lint@v0.0.1
+      - uses: cleartax/jira-lint@0.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_TOKEN }}
