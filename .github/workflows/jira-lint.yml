@@ -6,9 +6,11 @@ jobs:
   jira-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: cleartax/jira-lint@v0.0.1
+      - uses: asbjornu/jira-lint@feature/add-jira-user
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          jira-user: ${{ secrets.JIRA_USER }}
           jira-token: ${{ secrets.JIRA_TOKEN }}
           jira-base-url: https://payexjira.atlassian.net
           skip-branches: '^(develop|master|main|release\/v?\d+)$'
+          validate_issue_status: true
