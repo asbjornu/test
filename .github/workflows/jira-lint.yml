@@ -6,7 +6,7 @@ jobs:
   jira-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: btwrk/jira-linter@v1.0.0
+      - uses: btwrk/jira-linter@v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-user: ${{ secrets.JIRA_USER }}
