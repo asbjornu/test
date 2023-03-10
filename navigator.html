@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Navigator</title>
+        <style>
+            html {
+                background-color: #111;
+            }
+            body {
+                font-family: 'Courier New', Courier, monospace;
+                width: 50%;
+                color: #ffc;
+                margin: 0 auto;
+            }
+            table {
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #ccc;
+                padding: 0.5em;
+            }
+
+            th {
+            }
+
+            th[scope="row"] {
+                font-weight: bold;
+                text-align: right;
+            }
+        </style>
+        <script type="text/javascript">
+            (function() {
+                document.addEventListener('DOMContentLoaded', function() {
+                    const tbody = document.querySelector('table#navigator tbody');
+
+                    for (var i in navigator) {
+                        const tr = document.createElement('tr');
+                        const propCell = document.createElement('th');
+                        const valueCell = document.createElement('td')
+                        const propCode = document.createElement('code');
+                        const valueCode = document.createElement('code');
+                        propCode.innerHTML = i;
+                        valueCode.innerHTML = navigator[i];
+                        propCell.appendChild(propCode);
+                        valueCell.appendChild(valueCode);
+                        propCell.setAttribute('scope', 'row');
+                        tr.appendChild(propCell);
+                        tr.appendChild(valueCell);
+                        tbody.appendChild(tr);
+                    }
+                });
+            })();
+        </script>
+    </head>
+    <body>
+        <h1>Navigator</h1>
+        <p>
+            The properties and their respective value of the
+            <code>navigator</code> object.
+        </p>
+        <table id="navigator">
+            <thead><tr><th>Property</th><th>Value</th></tr></thead>
+            <tbody>
+            </tbody>
+        </table>
+    </body>
+</html>
