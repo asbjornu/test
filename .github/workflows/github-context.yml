@@ -9,6 +9,17 @@ on:
     types: [created]
 
 jobs:
+  gitversion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.x'
+      - uses: gittools/actions/gitversion/execute@v0
+
   context:
     runs-on: ubuntu-latest
     steps:
