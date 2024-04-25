@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AlpineJS Test</title>
+    </head>
+    <body>
+        <script src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js"></script>
+        <script>
+            document.addEventListener('alpine:init', function() {
+                console.log('Alpine initialized');
+
+                Alpine.store('page', {
+                    pageNumber: 1,
+
+                    increment() {
+                        console.log(this.pageNumber, Alpine.store.maxPages);
+
+                        if (this.pageNumber === Alpine.store.maxPages) {
+                            return;
+                        }
+
+                        this.pageNumber += 1;
+                    },
+
+                    decrement() {
+                        console.log(this.pageNumber, Alpine.store.maxPages);
+
+                        if (this.pageNumber === 1) {
+                            return;
+                        }
+
+                        this.pageNumber -= 1;
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
