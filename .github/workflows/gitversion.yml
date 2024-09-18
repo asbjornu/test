@@ -1,0 +1,16 @@
+name: GitVersion
+
+on:
+  workflow_dispatch:
+
+jobs:
+  gitversion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gittools/actions/gitversion/setup@v1.2.0
+        with:
+          versionSpec: '6.x'
+      - uses: gittools/actions/gitversion/execute@v1.2.0
